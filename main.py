@@ -1,6 +1,7 @@
-from calculator import multiply
+from calculator import Calculator
 
 
 if __name__ == "__main__":
-    result = multiply(6, 7)
+    calculator = Calculator()
+    result = calculator.multiply(6, 7)
     print(f"6 * 7 = {result}")
