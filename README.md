@@ -2,6 +2,14 @@
 
 A small Python calculator example with a `Calculator` class.
 
+## Development Setup
+
+```bash
+python -m venv venv
+venv\Scripts\activate    # Windows
+pip install -r requirements.txt
+```
+
 ## `Calculator`
 
 The `Calculator` class provides `multiply(first, second)` and

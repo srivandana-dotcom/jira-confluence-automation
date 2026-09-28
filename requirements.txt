@@ -1,0 +1,2 @@
+# No external dependencies yet — add packages here as the project grows
+# (e.g., requests, python-dotenv for planned Jira/Confluence integrations)
