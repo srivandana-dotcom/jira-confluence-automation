@@ -1,15 +1,17 @@
 # Calculator
 
-A small Python calculator example with a `multiply()` function.
+A small Python calculator example with a `Calculator` class.
 
-## `multiply()`
+## `Calculator`
 
-`multiply(first, second)` returns the product of two numbers.
+The `Calculator` class provides `multiply(first, second)` and
+`divide(first, second)` methods.
 
 ```python
-from calculator import multiply
+from calculator import Calculator
 
-result = multiply(6, 7)
+calculator = Calculator()
+result = calculator.multiply(6, 7)
 print(result)  # 42
 ```
 
