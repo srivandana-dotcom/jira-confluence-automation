@@ -3,6 +3,14 @@
     "echo-windows": {
       "command": "powershell",
       "args": ["-ExecutionPolicy", "Bypass", "-File", "./tools/mcp-echo.ps1"]
+    },
+    "time-windows": {
+      "command": "powershell",
+      "args": ["-ExecutionPolicy", "Bypass", "-File", "./tools/mcp-time.ps1"]
+    },
+    "calculator-windows": {
+      "command": "powershell",
+      "args": ["-ExecutionPolicy", "Bypass", "-File", "./tools/mcp-calculator.ps1"]
     }
   }
 }
