@@ -16,3 +16,5 @@ user-invocable: false
   + Keywords: document the processor, write README section, update README
 - [calculate-compound-interest.agent.md](./calculate-compound-interest.agent.md) — Runs `tools/compound_interest.py` to answer compound interest / future value questions and formats the result.
   + Keywords: compound interest, calculate interest, future value of an investment
+- [use-transcript_loader.agent.md](./use-transcript_loader.agent.md) — Runs `tools/transcript_loader.py` to read/retrieve and display a transcript file from a given path.
+  + Keywords: load transcript, read the transcript file, show me the transcript
