@@ -1,0 +1,4 @@
+Meeting: Sprint Sync — 2026-09-29
+Alex will renew the Jira API token by October 2.
+Priya will finish the assignee resolver alias mapping this week.
+Sam raised a blocker on the firmware signing certificate.
