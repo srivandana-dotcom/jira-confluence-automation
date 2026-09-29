@@ -14,3 +14,5 @@ user-invocable: false
   + Keywords: write tests, unit test, cover the scenarios, test module
 - [document-processor-readme.agent.md](./document-processor-readme.agent.md) — Writes one README.md section (overview, setup, usage, limitations) for the Meeting Notes → Jira Action Item Processor.
   + Keywords: document the processor, write README section, update README
+- [calculate-compound-interest.agent.md](./calculate-compound-interest.agent.md) — Runs `tools/compound_interest.py` to answer compound interest / future value questions and formats the result.
+  + Keywords: compound interest, calculate interest, future value of an investment
