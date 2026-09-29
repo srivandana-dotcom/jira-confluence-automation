@@ -11,6 +11,10 @@
     "calculator-windows": {
       "command": "powershell",
       "args": ["-ExecutionPolicy", "Bypass", "-File", "./tools/mcp-calculator.ps1"]
+    },
+    "github": {
+      "type": "http",
+      "url": "https://api.githubcopilot.com/mcp/"
     }
   }
 }
