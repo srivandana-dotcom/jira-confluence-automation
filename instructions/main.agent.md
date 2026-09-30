@@ -18,3 +18,5 @@ user-invocable: false
   + Keywords: compound interest, calculate interest, future value of an investment
 - [use-transcript_loader.agent.md](./use-transcript_loader.agent.md) — Runs `tools/transcript_loader.py` to read/retrieve and display a transcript file from a given path.
   + Keywords: load transcript, read the transcript file, show me the transcript
+- [validate-instructions.agent.md](./validate-instructions.agent.md) — Audits `instructions/*.agent.md` files for Single Responsibility Principle compliance (one workflow per file, size, catalog sync).
+  + Keywords: validate instructions, check SRP, audit instruction files, review instruction files
