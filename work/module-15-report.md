@@ -1,3 +1,12 @@
+# Module 15 Completion Report
+
+## Script Metadata
+- Filename: tools/validate_instructions.py
+- Language: Python
+- Purpose: Bulk-processes every `instructions/*.agent.md` file (excluding `main.agent.md` and `validate-instructions.agent.md`) and checks each one individually for structural compliance with `validate-instructions.agent.md`'s rules — line count vs. the 700-line soft limit, presence of YAML frontmatter, and whether the file has a corresponding entry in the `main.agent.md` catalog.
+
+## Script Contents
+```python
 """Run the objective (structural) checks from validate-instructions.agent.md
 against each instruction file, one at a time.
 
@@ -82,3 +91,26 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+```
+
+## Parameters
+| Parameter | Description | Default |
+|-----------|-------------|---------|
+| `--instructions-dir` | Path to the instructions directory to scan | `instructions` |
+
+## Test Run Output
+```
+$ python tools/validate_instructions.py
+File                                           Lines  Size OK  Frontmatter  In Catalog
+--------------------------------------------------------------------------------------
+calculate-compound-interest.agent.md              38      Yes          Yes         Yes
+create-status-report.agent.md                     36      Yes          Yes         Yes
+creating-instructions.agent.md                   253      Yes          Yes         Yes
+document-processor-readme.agent.md                27      Yes          Yes         Yes
+implement-processor-module.agent.md               31      Yes          Yes         Yes
+test-processor-module.agent.md                    28      Yes          Yes         Yes
+use-transcript_loader.agent.md                    32      Yes          Yes         Yes
+
+Note: Single Responsibility Principle compliance requires manual/agent judgment
+of workflow intent — not checked by this script.
+```
