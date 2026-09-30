@@ -7,7 +7,7 @@ Derived from [project_spec.md](../project_spec.md). Core Features are prioritize
 - [x] Add `requests` and `python-dotenv` to `requirements.txt` — *custom skill*
 - [x] Create `.env.example` with placeholders for Jira Cloud email + API token — *custom skill*
 - [x] Create assignee mapping config file (name → Jira account ID/email) with placeholder entries for the 10 team members — *custom skill*
-- [ ] Create the duplicate-tracking log store (decide JSON file vs. SQLite; create empty initial file) — *custom skill*
+- [ ] Create the duplicate-tracking log store (decide JSON file vs. SQLite; create empty initial file) — *custom skill* — [Issue #1](https://github.com/srivandana-dotcom/jira-confluence-automation/issues/1)
 
 ## Phase 2: Core Features
 - [x] Implement `transcript_loader` to read a transcript file from a given path — *MCP* (generic filesystem-read capability, e.g. a filesystem MCP server)
