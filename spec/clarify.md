@@ -8,13 +8,11 @@ This review does not propose solutions beyond a suggested direction — items ma
 
 ## 1. Contradictions
 
-1. **Partial board failure vs. "no publish on failure" (FR-011 vs. FR-012)**
-   FR-011 says a failed fetch for one board must not block the other boards from displaying. FR-012 says the previous Confluence content must be left unchanged "if the publish step fails." It's undefined whether a *partial* board failure (2 of 3 boards fetched OK) counts as "the publish step failing" (block the whole page update) or should still publish the 2 successful boards plus an error placeholder for the third. These two requirements read as compatible for the in-app dashboard but contradictory for Confluence publishing specifically. **[NEEDS CLARIFICATION]**
+1. ~~**Partial board failure vs. "no publish on failure" (FR-011 vs. FR-012)**~~ **RESOLVED**: A partial board-fetch failure is NOT treated as a "publish step failure." The successful boards are published normally and the failed board is rendered as an error placeholder section on the same Confluence page. FR-012's "leave previous content unchanged" rule now applies only to failures of the Confluence write call itself (auth error, page not found, network failure), not to upstream board-fetch failures. See updated FR-006/FR-011/FR-012 and new Acceptance Scenario 3 under User Story 2 in `spec/specification.md`.
 
 2. ~~**Single on-demand script vs. multi-user web app audience**~~ **RESOLVED** (via Gap #9): The app is operator-only, run locally by a single person; the in-app dashboard (User Story 1) is for that operator, not the broader stakeholder audience, who only ever see the Confluence page (User Story 2). No shared/multi-user access-control model is needed.
 
-3. **Config mechanism: file vs. database vs. UI**
-   The original spec used a static config file for board IDs and the Confluence page ID. The new specification's User Story 3 says admins should be able to add/remove boards "without code changes," and the stack now includes PostgreSQL specifically for persistence (FR-014, constitution's migration requirement). It's not stated whether board/Confluence config now lives in Postgres (edited via an admin UI or API), or is still a static file mounted into the container. This materially affects data model, migrations, and whether an admin UI/auth is even in scope. **[NEEDS CLARIFICATION]**
+3. ~~**Config mechanism: file vs. database vs. UI**~~ **RESOLVED**: Board IDs and the Confluence page ID are stored in PostgreSQL (not a static file), editable by the operator through the app's own UI/API. Since the app is single-operator/local (per Gap #9), this is a single config record, not a multi-tenant admin system. See updated FR-007/FR-008 and the Dashboard Config entity in `spec/specification.md`.
 
 ## 2. Gaps (missing requirements)
 
@@ -40,4 +38,4 @@ This review does not propose solutions beyond a suggested direction — items ma
 
 ## Recommendation
 
-Deployment/audience (Gap #9, Contradiction #2) is now resolved: single local operator, no app-level auth needed. Still resolve Contradiction #1 (partial-failure publish behavior) and Contradiction #3 (config mechanism: file vs. DB vs. UI) before proceeding to `/speckit-plan`, since they affect the data model structurally. The remaining gaps/ambiguities can be captured as open clarification items and resolved incrementally, but should not be silently assumed during planning.
+All three contradictions and the deployment gap (#9) are now resolved: single local operator, no app-level auth needed, config lives in PostgreSQL edited via the app's own UI, and partial board-fetch failures still publish successfully-fetched boards. The remaining gaps/ambiguities (performance targets, rate-limit handling, audit logging, test strategy, migration tooling, retention policy, Confluence collision handling, and the unclear/ambiguous requirements) can be captured as open clarification items and resolved incrementally, but should not be silently assumed during planning.

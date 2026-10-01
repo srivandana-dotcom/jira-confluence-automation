@@ -37,6 +37,7 @@ As a team lead, I want the combined dashboard pushed to a single Confluence page
 
 1. **Given** a valid Confluence page ID is configured, **When** a refresh completes successfully, **Then** the existing Confluence page content is replaced in place with the current combined dashboard (one section per board).
 2. **Given** the Confluence update call fails (e.g., auth error, page not found), **When** the refresh runs, **Then** the user is shown a clear error and the previous Confluence page content is left unchanged.
+3. **Given** 2 of 3 configured boards fetched successfully and 1 failed, **When** the refresh publishes to Confluence, **Then** the page is updated with the 2 successful boards' sections rendered normally and the failed board rendered as an error placeholder section, rather than blocking the entire publish.
 
 ---
 
@@ -87,13 +88,13 @@ As a team lead, I want to manually trigger a refresh from the UI, so the dashboa
 - **FR-003**: System MUST flag blockers/at-risk items using a combination of: status is "Blocked" (or equivalent), issue has a flag/impediment or specific label, or due date has passed while issue is still open.
 - **FR-004**: System MUST source burndown trend data from Jira's native sprint report rather than maintaining its own historical snapshots.
 - **FR-005**: System MUST render a combined dashboard view in the frontend with one section per configured board, showing completion %, blockers, and burndown trend.
-- **FR-006**: System MUST publish the combined dashboard to a single, pre-configured Confluence page, replacing that page's content in place on each successful refresh.
-- **FR-007**: System MUST support configuration of multiple board IDs via a config mechanism (not auto-discovery).
-- **FR-008**: System MUST support configuration of the target Confluence page ID via the same config mechanism.
+- **FR-006**: System MUST publish the combined dashboard to a single, pre-configured Confluence page, replacing that page's content in place on each refresh attempt — including when one or more boards failed to fetch (see FR-011/FR-012 for exact behavior).
+- **FR-007**: System MUST store configuration of tracked board IDs in PostgreSQL, editable by the operator through the app's UI/API (not a static file), so boards can be added/removed without code changes or redeploys.
+- **FR-008**: System MUST store the target Confluence page ID in the same PostgreSQL-backed configuration, editable the same way as board config.
 - **FR-009**: System MUST load Jira/Confluence credentials (email + API token) from environment variables, never hardcoded in source.
 - **FR-010**: System MUST refresh data only on-demand (explicit user action), with no scheduler/cron integration.
-- **FR-011**: System MUST report a clear, board-specific error when a board's data cannot be fetched, without failing the entire refresh for other boards.
-- **FR-012**: System MUST leave the previous Confluence page content unchanged if the publish step fails.
+- **FR-011**: System MUST report a clear, board-specific error when a board's data cannot be fetched, without failing the entire refresh for other boards. A board that fails to fetch MUST still be published to Confluence, rendered as an error placeholder section (board name + error reason) in place of its normal data, alongside the normally rendered sections for the boards that fetched successfully.
+- **FR-012**: System MUST leave the previous Confluence page content entirely unchanged only when the publish (write) call to Confluence itself fails — e.g., auth error, page not found, network failure. A partial board-fetch failure (FR-011) is not, by itself, a "publish step" failure and MUST NOT block publishing the boards that succeeded.
 - **FR-013**: System MUST prevent concurrent duplicate refreshes from being triggered at the same time.
 - **FR-014**: System MUST persist the latest fetched dashboard snapshot in PostgreSQL so the dashboard can be displayed without re-fetching from Jira on every page load.
 
@@ -102,7 +103,7 @@ As a team lead, I want to manually trigger a refresh from the UI, so the dashboa
 - **Board Config**: Represents a tracked Jira board — board ID, display name, Jira project key.
 - **Sprint Snapshot**: The result of a refresh for one board — completion %, blocker list, burndown data, fetch timestamp, board reference.
 - **Blocker Item**: An issue flagged as blocked/at-risk — issue key, summary, reason flagged (status/label/overdue), due date.
-- **Dashboard Config**: System-wide settings — Confluence page ID, list of tracked board configs.
+- **Dashboard Config**: System-wide settings stored in PostgreSQL — Confluence page ID, list of tracked board configs. A single row/record per deployment, since the app runs for one local operator with one combined dashboard (see Deployment section).
 
 ## Success Criteria *(mandatory)*
 
