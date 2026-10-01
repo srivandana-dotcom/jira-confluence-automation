@@ -1,3 +1,28 @@
+/** FR-005: formats the raw greenhopper burndown payload into a done-vs-remaining summary. */
+function formatBurndown(burndown) {
+  if (!burndown) return null;
+  const {
+    completedIssuesCount,
+    issuesNotCompletedCount,
+    completedIssuesInitialEstimateSum,
+    issuesNotCompletedInitialEstimateSum,
+  } = burndown;
+  if (
+    completedIssuesCount == null &&
+    issuesNotCompletedCount == null &&
+    completedIssuesInitialEstimateSum == null &&
+    issuesNotCompletedInitialEstimateSum == null
+  ) {
+    return null;
+  }
+  return {
+    doneIssues: completedIssuesCount ?? '—',
+    remainingIssues: issuesNotCompletedCount ?? '—',
+    donePoints: completedIssuesInitialEstimateSum ?? '—',
+    remainingPoints: issuesNotCompletedInitialEstimateSum ?? '—',
+  };
+}
+
 /** T024: renders one board's section, including the "no active sprint" and error states. */
 function BoardSection({ board, snapshot, blockers }) {
   const title = `${board.display_name} (${board.board_id})`;
@@ -36,6 +61,22 @@ function BoardSection({ board, snapshot, blockers }) {
       ) : (
         <p>No blockers.</p>
       )}
+      <h3>Burndown</h3>
+      {(() => {
+        const burndown = formatBurndown(snapshot.burndown_data);
+        return burndown ? (
+          <ul>
+            <li>
+              Done: {burndown.doneIssues} issues ({burndown.donePoints} pts)
+            </li>
+            <li>
+              Remaining: {burndown.remainingIssues} issues ({burndown.remainingPoints} pts)
+            </li>
+          </ul>
+        ) : (
+          <p>Burndown data unavailable.</p>
+        );
+      })()}
     </section>
   );
 }

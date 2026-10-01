@@ -8,8 +8,9 @@ function authHeader(email, apiToken) {
 /**
  * Minimal Jira Cloud client.
  * `fetchImpl` is injectable so tests can supply a stub instead of calling the real network.
+ * `sprintIssuesPageSize` is injectable so tests can exercise pagination without 100+ fixtures.
  */
-function createJiraClient({ fetchImpl = fetch } = {}) {
+function createJiraClient({ fetchImpl = fetch, sprintIssuesPageSize = 100 } = {}) {
   const env = requireEnv(['JIRA_BASE_URL', 'JIRA_EMAIL', 'JIRA_API_TOKEN']);
   const headers = {
     Authorization: authHeader(env.JIRA_EMAIL, env.JIRA_API_TOKEN),
@@ -30,12 +31,21 @@ function createJiraClient({ fetchImpl = fetch } = {}) {
     return data.values && data.values.length > 0 ? data.values[0] : null;
   }
 
-  /** Returns all issues in a sprint (FR-001, FR-002, FR-003 inputs). */
+  /** Returns all issues in a sprint, paging through results (FR-001, FR-002, FR-003 inputs). */
   async function getSprintIssues(sprintId) {
-    const data = await getJson(
-      `/rest/agile/1.0/sprint/${sprintId}/issue?fields=summary,status,duedate,labels,flagged,customfield_10016`
-    );
-    return data.issues || [];
+    let startAt = 0;
+    let issues = [];
+    // Jira paginates this endpoint; keep fetching until a page comes back short of the page size.
+    for (;;) {
+      const data = await getJson(
+        `/rest/agile/1.0/sprint/${sprintId}/issue?fields=summary,status,duedate,labels,flagged,customfield_10016&startAt=${startAt}&maxResults=${sprintIssuesPageSize}`
+      );
+      const page = data.issues || [];
+      issues = issues.concat(page);
+      if (page.length < sprintIssuesPageSize) break;
+      startAt += page.length;
+    }
+    return issues;
   }
 
   /**

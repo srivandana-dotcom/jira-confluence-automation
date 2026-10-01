@@ -50,6 +50,28 @@ function escapeHtml(str) {
     .replace(/>/g, '&gt;');
 }
 
+/** FR-005/FR-006: formats the raw greenhopper burndown payload into a done-vs-remaining summary. */
+function renderBurndown(burndown) {
+  const {
+    completedIssuesCount,
+    issuesNotCompletedCount,
+    completedIssuesInitialEstimateSum,
+    issuesNotCompletedInitialEstimateSum,
+  } = burndown || {};
+  if (
+    completedIssuesCount == null &&
+    issuesNotCompletedCount == null &&
+    completedIssuesInitialEstimateSum == null &&
+    issuesNotCompletedInitialEstimateSum == null
+  ) {
+    return '<h3>Burndown</h3><p>Burndown data unavailable.</p>';
+  }
+  return `<h3>Burndown</h3><ul>
+    <li>Done: ${completedIssuesCount ?? '—'} issues (${completedIssuesInitialEstimateSum ?? '—'} pts)</li>
+    <li>Remaining: ${issuesNotCompletedCount ?? '—'} issues (${issuesNotCompletedInitialEstimateSum ?? '—'} pts)</li>
+  </ul>`;
+}
+
 /**
  * FR-006/FR-011: renders one section per board in Confluence storage format.
  * Boards that failed to fetch (or have no active sprint) render as a labeled placeholder
@@ -80,7 +102,7 @@ function renderDashboardContent(boardResults) {
         ? `<table><tbody><tr><th>Issue</th><th>Summary</th><th>Reason</th></tr>${blockerRows}</tbody></table>`
         : '<p>No blockers.</p>';
 
-    return `${heading}<p>Completion: ${snapshot.completion_pct}%</p>${blockerTable}`;
+    return `${heading}<p>Completion: ${snapshot.completion_pct}%</p>${blockerTable}${renderBurndown(snapshot.burndown_data)}`;
   });
 
   const updatedAt = new Date().toISOString();
