@@ -22,7 +22,7 @@
 
 **Purpose**: Runnable project skeleton, nothing functional yet.
 
-- [ ] T001 Wire up `web-app/backend` (Express) and `web-app/frontend` (Vite + React) entry points so each starts cleanly
+- [x] T001 Wire up `web-app/backend` (Express) and `web-app/frontend` (Vite + React) entry points so each starts cleanly
       **AC**: `npm install && npm run dev` succeeds with no errors in both `web-app/backend` and `web-app/frontend`.
 - [ ] T002 [P] Add a PostgreSQL 15 service to `web-app/docker-compose.yml` with a named volume and env-driven credentials
       **AC**: `docker compose up -d db` starts a healthy Postgres 15 container reachable on the configured port.
