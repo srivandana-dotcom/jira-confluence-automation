@@ -114,6 +114,13 @@ As a team lead, I want to manually trigger a refresh from the UI, so the dashboa
 - **SC-004**: Adding or removing a tracked board requires only a configuration change, with zero code changes.
 - **SC-005**: 100% of blocker/at-risk items shown on the dashboard match the defined flagging rules (status, flag/label, or overdue).
 
+## Deployment
+
+- The app runs **locally, on a single person's machine**, via the project's Docker Compose setup — the same usage model as the original on-demand script. It is not deployed to a shared server, cloud host, or any network-reachable environment.
+- Because only the operator running it locally can load the dashboard UI or trigger a refresh, no application-level login/authentication is required for the web UI itself — access is governed by access to the local machine, not by the app.
+- The "stakeholders who don't use Jira" (User Story 2) view sprint status exclusively via the published Confluence page; they never access the local app or its UI directly.
+- Since there is a single operator and no shared/concurrent deployment, admin-vs-viewer role separation and multi-instance refresh locking are not required for the initial version.
+
 ## Assumptions
 
 - The user already has a Jira Cloud account with API access and a Confluence Cloud space with a pre-created target page.
