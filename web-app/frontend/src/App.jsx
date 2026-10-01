@@ -1,7 +1,17 @@
+import { useState } from 'react';
+import Dashboard from './pages/Dashboard';
+import Settings from './pages/Settings';
+
 function App() {
+  const [page, setPage] = useState('dashboard');
+
   return (
     <div>
-      <h1>Jira Sprint Dashboard</h1>
+      <nav>
+        <button onClick={() => setPage('dashboard')}>Dashboard</button>
+        <button onClick={() => setPage('settings')}>Settings</button>
+      </nav>
+      {page === 'dashboard' ? <Dashboard /> : <Settings />}
     </div>
   );
 }
